@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<head>
+	<title>ISHelp On-Demand</title>
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+	<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<script>
+		function test() {
+			alert('yes this works');
+		}
+		// shows loading.gif only if DOM reports valid form
+		function loader() {
+			addr = document.getElementById("email").value; // assign email form field to var
+			request = document.getElementById("request").value; // assign issue field to var
+			ereg = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+			treg = /^[\w\W\d\D]+/;
+			if (ereg.test(addr) == true && treg.test(request) == true) {
+				document.getElementById('spinner').style.display = "block";
+				// create form and submit to php
+				subform = document.getElementById('submitform');
+				uname = document.getElementById('uname');
+				issue = document.getElementById('issue');
+				uname.value = addr;
+				issue.value = request;
+				subform.submit();				
+
+			} else {
+				if (ereg.test(addr) != true) {
+					alert('You must input a valid e-mail address.');
+					return;
+				} 
+				else if (treg.test(request)) {
+					alert("You must input an issue or request.")
+					return;
+				} else {
+					alert('else');
+					return;
+				};
+			};
+		}
+	</script>
+</head>
+
+<body>
+	<!-- loading div, holds loading gif, default is display=none -->
+	<div id="spinner"><img src="./img/loading2.gif" id="loading-gif"></div>
+	<div id="wrapper"> <!-- replaces body/background with a div -->
+		<div id="window"> <!-- holds our content -->
+			<div id="title">
+				<center>
+				<img src="./img/cvent_white.png" id="cvent_logo"> ISHelp On-Demand
+				</center>
+			</div><!--title-->
+			<div id="form" > <!-- the webform -->
+					<b>E-Mail Address</b><br>
+					<input type="text" name="email" id="email" class="inputbox" placeholder="Type your e-mail address here" ><br>
+
+					<b>Issue/Request</b><br>
+					<textarea id="request" name="request" class="inputbox" placeholder="Type your issue or request here"></textarea>
+					<button id="submit-btn" value="SUBMIT" onClick="loader()">SUBMIT</button>
+					<!--<input type="submit" id="submit-btn" value="SUBMIT">-->
+					<!-- onClick checks DOM validation and displays loading gif if valid-->
+				<div id="hidden_div" style="display: none">
+					<form id="submitform" action="submit.php" method="post">
+						<input type="text" id="uname" name="uname"></a>
+						<input type="text" id="issue" name="issue"></a>
+					</form>
+				</div>
+			</div><!--form-->
+		</div><!--window-->
+	</div><!--wrapper-->
+</body>
