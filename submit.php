@@ -5,12 +5,13 @@ if(isset($_POST)) {
 	$x = explode("@",$_POST['uname']);
 	$fname = $x[0];
 	// assign vars
-	$to = $_POST['uname']; // . ',' . 'ishelp@cvent.com';
+	$to = 'pfraedrich@cvent.com';
 	// message body
 	$message =	'New ISHelp On-Demand ticket:' . "\r\n\r\n" . 
 				'Name: ' . $fname . "\r\n" .
 				'E-Mail: ' . $_POST['uname'] . "\r\n" .
-				'Issue: ' . 	$_POST['issue'];
+				'Issue: ' . 	$_POST['issue'] . "\r\n\r\n" . 
+				'Assign To: ' . $_POST['tech'];
 	// message subject
 	$subject = 'ISHelp On-Demand -- ' . $fname;
 	// set headers
@@ -31,6 +32,6 @@ if(isset($_POST)) {
 }
 else {
 	// if POST empty, display error
-	die('no post data to process');
+	die('HTTP/418 (ref. RFC-2324');
 }
 ?>

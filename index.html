@@ -6,39 +6,51 @@
 	<link href='http://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<script>
-		function test() {
-			alert('yes this works');
-		}
-		// shows loading.gif only if DOM reports valid form
+		// performs data validation and submits form if data is valid
 		function loader() {
 			addr = document.getElementById("email").value; // assign email form field to var
 			request = document.getElementById("request").value; // assign issue field to var
+			eng = document.getElementById("dropdown").value;
 			ereg = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 			treg = /^[\w\W\d\D]+/;
-			if (ereg.test(addr) == true && treg.test(request) == true) {
+			if (ereg.test(addr) == true && treg.test(request) == true && eng != "default") {
 				document.getElementById('spinner').style.display = "block";
 				// create form and submit to php
 				subform = document.getElementById('submitform');
 				uname = document.getElementById('uname');
 				issue = document.getElementById('issue');
+				engineer = document.getElementById('tech');
 				uname.value = addr;
 				issue.value = request;
-				subform.submit();				
+				engineer.value = eng;
+				setTimeout(function(){ 
+					subform.submit();
+				},2000)			
 
 			} else {
 				if (ereg.test(addr) != true) {
 					alert('You must input a valid e-mail address.');
 					return;
-				} 
-				else if (treg.test(request)) {
+				} else if (treg.test(request)) {
 					alert("You must input an issue or request.")
 					return;
+				} else if (eng == "default") {
+					alert("You must select which engineer is helping you.")
+					return;
 				} else {
-					alert('else');
+					alert("Please fill out all fields of the requset form before submitting.");
 					return;
 				};
 			};
-		}
+		};
+		// "Enter" submits form
+		function searchKeyPress(e) {   	
+	        // look for window.event in case event isn't passed in
+	        e = e || window.event;
+	        if (e.keyCode == 13) {
+	            document.getElementById('submit-btn').click();
+	        }
+    	};
 	</script>
 </head>
 
@@ -52,12 +64,22 @@
 				<img src="./img/cvent_white.png" id="cvent_logo"> ISHelp On-Demand
 				</center>
 			</div><!--title-->
-			<div id="form" > <!-- the webform -->
+			<div id="form"> <!-- the webform -->
 					<b>E-Mail Address</b><br>
-					<input type="text" name="email" id="email" class="inputbox" placeholder="Type your e-mail address here" ><br>
+					<input type="text" name="email" id="email" class="inputbox" placeholder="Type your e-mail address here" onkeypress="searchKeyPress(event);"><br>
 
 					<b>Issue/Request</b><br>
-					<textarea id="request" name="request" class="inputbox" placeholder="Type your issue or request here"></textarea>
+					<textarea id="request" name="request" class="inputbox" placeholder="Type your issue or request here" onkeypress="searchKeyPress(event);"></textarea>
+					<b>Select Engineer</b><br>
+					<select id="dropdown" name="dropdown">
+						<option value="default" disabled selected>Which engineer is helping you?</option>
+						<option value="Davon Witherspoon">Davon Witherspoon</option>
+						<option value="Jose Suarez">Jose Suarez</option>
+						<option value="Joseph Aubrey">Joseph Aubrey</option>
+						<option value="Kevin Podann">Kevin Podann</option>
+						<option value="Naseeb Hassanzai">Naseeb Hassanzai</option>
+						<option value="Next available HQ ISHelp engineer">- Next available engineer -</option>
+					</select>
 					<button id="submit-btn" value="SUBMIT" onClick="loader()">SUBMIT</button>
 					<!--<input type="submit" id="submit-btn" value="SUBMIT">-->
 					<!-- onClick checks DOM validation and displays loading gif if valid-->
@@ -65,6 +87,7 @@
 					<form id="submitform" action="submit.php" method="post">
 						<input type="text" id="uname" name="uname"></a>
 						<input type="text" id="issue" name="issue"></a>
+						<input type="text" id="tech" name="tech"></a>
 					</form>
 				</div>
 			</div><!--form-->
